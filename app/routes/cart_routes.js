@@ -30,7 +30,7 @@ const router = express.Router()
 
 
 // SHOW
-// GET /examples/5a7db6c74d55bc51bdf39793
+// GET /carts/5a7db6c74d55bc51bdf39793
 router.get('/carts/:id', requireToken, (req, res, next) => {
 	// req.params.id will be set based on the `:id` in the route
 	Cart.findById(req.params.id)
