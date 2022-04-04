@@ -19,14 +19,14 @@ const recipeSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        description: {
+            type: String,
+            required: true,
+        },
 		ingredients: {
             type: [ingredientSchema],
             required: true
         },
-		description: {
-			type: String,
-			required: true,
-		},
 		owner: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'User',

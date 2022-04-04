@@ -67,7 +67,7 @@ app.use(requestLogger)
 // register route files
 app.use(cartRoutes)
 app.use(userRoutes)
-app.use(recipleRoutes)
+app.use(recipeRoutes)
 
 // register error handling middleware
 // note that this comes after the route middlewares, because it needs to be
