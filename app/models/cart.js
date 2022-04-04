@@ -1,14 +1,18 @@
 const mongoose = require('mongoose')
 
-const exampleSchema = new mongoose.Schema(
+const CartSchema = new mongoose.Schema(
 	{
-		title: {
+		items: {
 			type: String,
 			required: true,
 		},
-		text: {
-			type: String,
+		total: {
+			type: Number,
 			required: true,
+		},
+		checkedOut:{
+			type: Boolean,
+			required: true
 		},
 		owner: {
 			type: mongoose.Schema.Types.ObjectId,
