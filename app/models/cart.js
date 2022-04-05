@@ -1,28 +1,24 @@
 const mongoose = require('mongoose')
 
+const itemSchema = require('./item')
+
 const CartSchema = new mongoose.Schema(
 	{
-		items: {
-			type: String,
-			required: true,
-		},
-		total: {
-			type: Number,
-			required: true,
-		},
+		items: [itemSchema],
 		checkedOut:{
 			type: Boolean,
 			required: true
 		},
 		owner: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: 'User',
-			required: true,
+			ref: 'User'
 		},
 	},
 	{
 		timestamps: true,
 	}
 )
+
+//can make total as a virtual
 
 module.exports = mongoose.model('Cart', CartSchema)
