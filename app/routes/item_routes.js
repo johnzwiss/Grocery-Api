@@ -38,35 +38,65 @@ const router = express.Router()
 router.post('/item/add',requireToken, async (req, res, next) => {
     const item = req.body.item
     const {name} = item
-    cartOwner = req.user.id
+    const cartOwner = req.user.id
     try {
-        let cart = await Cart.find({ owner: cartOwner });
+        let cart = await Cart.find({ owner: cartOwner })
     
         if (cart) {
           //cart exists for user
-          let itemIndex = cart[0].items.findIndex(i => i.name == name);
+          let itemIndex = cart[0].items.findIndex(i => i.name == name)
           //p => p.productId == productId
+            // require auth
+            requireOwnership(req, cart[0])
     
           if (itemIndex > -1) {
-            //product exists in the cart, update the quantity
-            let targetItem = cart[0].items[itemIndex];
-            //let productItem
-            targetItem.qty = parseInt(targetItem.qty) + parseInt(item.qty);
-            cart[0].items[itemIndex] = targetItem;
+            //item exists in the cart, update the quantity
+            let targetItem = cart[0].items[itemIndex]
+            targetItem.qty = parseInt(targetItem.qty) + parseInt(item.qty)
+            cart[0].items[itemIndex] = targetItem
           } else {
-            //product does not exists in cart, add new item
-            cart[0].items.push({ name,price,qty });
+    
+            //item does not exists in cart, add new item
+            cart[0].items.push({ name,price,qty })
           }
-          cart = await cart[0].save();
+          cart = await cart[0].save()
           return res.status(201).json({ cart: cart[0] })
         }
       } catch (err) {
-        console.log(err);
-        res.status(500).send("Something went wrong");
+        console.log(err)
+        res.status(500).send("Something went wrong")
       }
 
 })
 
+
+// DELETE -> delete an item from cart
+// DELETE /item/<item_id>
+router.delete('/item/:id', requireToken, (req, res, next) => {
+    // get item id from params
+    const itemId = req.params.id
+    const cartOwner = req.user.id
+    // find the pet in the db
+    Cart.find({ owner: cartOwner })
+        //if a cart is not found
+        .then(handle404)
+        //cart found
+        .then(cart => {
+            // get the specific subdocument by its id
+            const itemToDelete = cart[0].items.id(itemId)
+ 
+            // require that the deleter is the owner of the cart
+            requireOwnership(req, cart[0])
+            // call remove on the item we got on the line above requireOwnership
+            itemToDelete.remove()
+
+            // // return the saved cart
+            return cart[0].save()
+        })
+        // send 204 no content
+        .then(() => res.sendStatus(204))
+        .catch(next)
+})
 
 
 
