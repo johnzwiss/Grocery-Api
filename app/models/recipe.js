@@ -23,8 +23,11 @@ const recipeSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-		ingredients: {
-            type: [ingredientSchema],
+		ingredients: [{
+            type:String
+        }],
+        instructions: {
+            type: String,
             required: true
         },
 		owner: {

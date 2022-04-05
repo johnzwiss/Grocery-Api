@@ -31,21 +31,24 @@ const router = express.Router()
 
 // SHOW
 // GET /carts/5a7db6c74d55bc51bdf39793
-router.get('/carts/:id', requireToken, (req, res, next) => {
+router.get('/carts/view', requireToken, (req, res, next) => {
 	// req.params.id will be set based on the `:id` in the route
-	Cart.findById(req.params.id)
+	cartOwner = req.user.id
+	Cart.find({owner:cartOwner})
 		.then(handle404)
 		// if `findById` is succesful, respond with 200 and "cart" JSON
-		.then((cart) => res.status(200).json({ cart: cart.toObject() }))
+		.then((cart) => res.status(200).json({ cart: cart[0].toObject() }))
 		// if an error occurs, pass it to the handler
 		.catch(next)
 })
 
 // CREATE
 // POST /carts
-router.post('/carts', requireToken, (req, res, next) => {
+router.post('/carts/create', requireToken, (req, res, next) => {
 	// set owner of new cart to be current user
 	req.body.cart.owner = req.user.id
+	console.log('this is req.body.cart',req.body.cart)
+	console.log('this is user',req.user)
 
 	Cart.create(req.body.cart)
 		// respond to succesful `create` with status 201 and JSON of new "cart"
