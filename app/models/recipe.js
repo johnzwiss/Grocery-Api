@@ -1,17 +1,5 @@
 const mongoose = require('mongoose')
 
-const ingredientSchema = new mongoose.Schema ({
-    ingredient: {
-        type: String
-    },
-    price: {
-        type: Number
-    },
-    qty: {
-        type: Number
-    }
-})
-
 const recipeSchema = new mongoose.Schema(
 	{
 
@@ -23,8 +11,15 @@ const recipeSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-		ingredients: [{
-            type:String
+		ingredientsArr: [{
+            ingredient: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Ingredient',
+            },
+            qty: {
+                type: number
+            }
+
         }],
         instructions: {
             type: String,
