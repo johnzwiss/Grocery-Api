@@ -13,7 +13,7 @@ const itemSchema = new mongoose.Schema({
     },
     qty: {
         type: String,
-        required: true,
+        default: 1,
         min: 1
     }
 }, {

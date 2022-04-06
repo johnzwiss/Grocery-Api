@@ -52,7 +52,7 @@ router.post('/item/add',requireToken, async (req, res, next) => {
           if (itemIndex > -1) {
             //item exists in the cart, update the quantity
             let targetItem = cart[0].items[itemIndex]
-            targetItem.qty = parseInt(targetItem.qty) + parseInt(item.qty)
+            targetItem.qty ++
             cart[0].items[itemIndex] = targetItem
           } else {
     
