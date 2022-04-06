@@ -6,6 +6,10 @@ const ingredientSchema = new mongoose.Schema ({
     },
     price: {
         type: Number
+    },
+    amount: {
+        type: Number,
+        min: 0    
     }
     
 },

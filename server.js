@@ -8,6 +8,7 @@ const cartRoutes = require('./app/routes/cart_routes')
 const userRoutes = require('./app/routes/user_routes')
 const recipeRoutes = require('./app/routes/recipe_routes')
 const itemRoutes = require('./app/routes/item_routes')
+const ingredientRoutes = require('./app/routes/ingredient_routes')
 
 // require middleware
 const errorHandler = require('./lib/error_handler')
@@ -70,6 +71,7 @@ app.use(cartRoutes)
 app.use(userRoutes)
 app.use(itemRoutes)
 app.use(recipeRoutes)
+app.use(ingredientRoutes)
 
 // register error handling middleware
 // note that this comes after the route middlewares, because it needs to be

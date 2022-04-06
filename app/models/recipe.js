@@ -17,7 +17,7 @@ const recipeSchema = new mongoose.Schema(
                 ref: 'Ingredient',
             },
             qty: {
-                type: number
+                type: Number
             }
 
         }],
