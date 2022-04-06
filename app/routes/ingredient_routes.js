@@ -31,11 +31,12 @@ const router = express.Router()
 
 // CREATE
 // POST /ingredients
-router.post('/ingredients', requireToken, (req, res, next) => {
+router.post('/ingredients', (req, res, next) => {
 	// set owner of new ingredient to be current user
-	req.body.ingredient.owner = req.user.id
+	// req.body.ingredient.owner = req.user.id
+	console.log('this is req.body.Ingredient.price', req.body.Ingredient.price)
 
-	Ingredients.create(req.body.ingredient)
+	Ingredients.create(req.body.Ingredient)
 		// respond to succesful `create` with status 201 and JSON of new "ingredient"
 		.then((ingredient) => {
 			res.status(201).json({ ingredient: ingredient.toObject() })
