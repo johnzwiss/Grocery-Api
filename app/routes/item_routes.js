@@ -42,7 +42,7 @@ router.post('/item/add',requireToken, async (req, res, next) => {
     try {
         let cart = await Cart.find({ owner: cartOwner })
     
-        if (cart.length>2) {
+        if (cart.length>0) {
           console.log('cart found',cart)
           //cart exists for user
           let itemIndex = cart[0].items.findIndex(i => i.name == name)
