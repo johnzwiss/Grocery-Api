@@ -37,12 +37,12 @@ const router = express.Router()
 
 router.post('/item/add',requireToken, async (req, res, next) => {
     const item = req.body.item
-    const {name} = item
+    const {name,price,qty} = item
     const cartOwner = req.user.id
     try {
         let cart = await Cart.find({ owner: cartOwner })
     
-        if (cart) {
+        if (cart!==[]) {
           //cart exists for user
           let itemIndex = cart[0].items.findIndex(i => i.name == name)
           //p => p.productId == productId
@@ -62,12 +62,22 @@ router.post('/item/add',requireToken, async (req, res, next) => {
           cart = await cart[0].save()
           return res.status(201).json({ cart: cart[0] })
         }
+        else {
+            //no cart for user, create new cart
+            let newCart = await Cart.create({ checkedOut: 'false', owner: cartOwner})
+            newCart.items.push({name,price,qty})
+            newCart = await newCart.save()
+            return res.status(201).send(newCart);
+          }
+    
       } catch (err) {
         console.log(err)
         res.status(500).send("Something went wrong")
       }
 
 })
+
+
 
 
 // DELETE -> delete an item from cart
