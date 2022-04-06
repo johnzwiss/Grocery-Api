@@ -42,7 +42,8 @@ router.post('/item/add',requireToken, async (req, res, next) => {
     try {
         let cart = await Cart.find({ owner: cartOwner })
     
-        if (cart!==[]) {
+        if (cart.length>2) {
+          console.log('cart found',cart)
           //cart exists for user
           let itemIndex = cart[0].items.findIndex(i => i.name == name)
           //p => p.productId == productId
@@ -63,6 +64,7 @@ router.post('/item/add',requireToken, async (req, res, next) => {
           return res.status(201).json({ cart: cart[0] })
         }
         else {
+          console.log('NO CART!!')
             //no cart for user, create new cart
             let newCart = await Cart.create({ checkedOut: 'false', owner: cartOwner})
             newCart.items.push({name,price,qty})
