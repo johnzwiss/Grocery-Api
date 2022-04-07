@@ -89,7 +89,7 @@ router.delete('/item/:id', requireToken, (req, res, next) => {
     // get item id from params
     const itemId = req.params.id
     const cartOwner = req.user.id
-    // find the pet in the db
+    // find the cart
     Cart.find({ owner: cartOwner })
         //if a cart is not found
         .then(handle404)
@@ -111,7 +111,70 @@ router.delete('/item/:id', requireToken, (req, res, next) => {
         .catch(next)
 })
 
+// UPDATE -> increases item quantity by one
+// PATCH /item/add/<item_id>
+router.patch('/item/add/:id', requireToken, (req, res, next) => {
+  // get item id from params
+  const itemId = req.params.id
+  const cartOwner = req.user.id
+  // find the cart
+  Cart.find({ owner: cartOwner })
+      //if a cart is not found
+      .then(handle404)
+      //cart found
+      .then(cart => {
+          // get the specific subdocument by its id
+          const theItem = cart[0].items.id(itemId)
 
+
+          // require that the deleter is the owner of the cart
+          requireOwnership(req, cart[0])
+
+          //increases item qty by 1
+          theItem.qty=parseInt(theItem.qty)+1
+
+          // return the saved cart
+          return cart[0].save()
+      })
+      // send 204 no content
+      .then(() => res.sendStatus(204))
+      .catch(next)
+})
+
+
+// UPDATE -> decreases item quantity by one
+// PATCH /item/sub/<item_id>
+router.patch('/item/sub/:id', requireToken, (req, res, next) => {
+  // get item id from params
+  const itemId = req.params.id
+  const cartOwner = req.user.id
+  // find the cart
+  Cart.find({ owner: cartOwner })
+      //if a cart is not found
+      .then(handle404)
+      //cart found
+      .then(cart => {
+          // get the specific subdocument by its id
+          const theItem = cart[0].items.id(itemId)
+
+
+          // require that the deleter is the owner of the cart
+          requireOwnership(req, cart[0])
+          //prevents item qty to be below 1
+          if(parseInt(theItem.qty)>1) {
+            //decreases item qty by 1
+            theItem.qty=parseInt(theItem.qty)-1
+
+          }
+
+
+          // return the saved cart
+          return cart[0].save()
+      })
+      // send 204 no content
+      .then(() => res.sendStatus(204))
+      .catch(next)
+})
 
 
 module.exports = router
