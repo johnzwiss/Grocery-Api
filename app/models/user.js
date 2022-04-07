@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const favoriteSchema = require('./favorites')
 
 const userSchema = new mongoose.Schema(
 	{
@@ -12,6 +13,7 @@ const userSchema = new mongoose.Schema(
 			required: true,
 		},
 		token: String,
+		favorites: [favoriteSchema]
 	},
 	{
 		timestamps: true,
