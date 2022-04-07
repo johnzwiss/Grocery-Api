@@ -12,14 +12,7 @@ const recipeSchema = new mongoose.Schema(
             required: true,
         },
 		ingredientsArr: [{
-            ingredient: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Ingredient',
-            },
-            qty: {
-                type: Number
-            }
-
+            type: Object
         }],
         instructions: {
             type: String,

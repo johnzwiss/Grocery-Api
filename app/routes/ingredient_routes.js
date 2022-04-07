@@ -47,5 +47,4 @@ router.post('/ingredients', (req, res, next) => {
 		.catch(next)
 })
 
-
 module.exports = router

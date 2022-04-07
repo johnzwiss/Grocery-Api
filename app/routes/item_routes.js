@@ -42,7 +42,7 @@ router.post('/item/add',requireToken, async (req, res, next) => {
     try {
         let cart = await Cart.find({ owner: cartOwner })
     
-        if (cart.length>2) {
+        if (cart.length>0) {
           console.log('cart found',cart)
           //cart exists for user
           let itemIndex = cart[0].items.findIndex(i => i.name == name)
@@ -61,6 +61,7 @@ router.post('/item/add',requireToken, async (req, res, next) => {
             cart[0].items.push({ name,price,qty })
           }
           cart = await cart[0].save()
+          console.log('this is cart', cart)
           return res.status(201).json({ cart: cart[0] })
         }
         else {
