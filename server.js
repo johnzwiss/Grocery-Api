@@ -2,6 +2,9 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
+require('dotenv').config
+const stripe = require('stripe')("sk_test_51KdGMSF7PsZfSFZBl4g1OMVv30ncwV0wM2mUeifPEAnWrzuJQj2EzpPwlQbCtCd7O9sEIiQOjGoD1kfuIfGVVKAo00shoiOfVB")
+const bodyParser = require('body-parser')
 
 // require route files
 const cartRoutes = require('./app/routes/cart_routes')
@@ -56,6 +59,35 @@ app.use(replaceToken)
 
 // register passport authentication middleware
 app.use(auth)
+
+// STRIPE Dependencies
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
+app.post("/payment", cors(), async (req, res) => {
+	let {amount, id} = req.body
+	try {
+		const payment = await stripe.paymentIntents.create({
+			amount,
+			currency: "USD",
+			description: "NutriCart",
+			payment_method: id,
+			confirm: true
+		})
+		console.log("payment", payment)
+		res.json({
+			message: "Payment successful",
+			success: true
+		})
+	} catch (error) {
+		console.log("Error", error)
+		res.json({
+			message: "Payment Failed",
+			success: false
+		})
+		
+	}
+})
+
 
 // add `express.json` middleware which will parse JSON requests into
 // JS objects before they reach the route files.
