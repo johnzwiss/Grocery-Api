@@ -111,6 +111,32 @@ router.delete('/item/:id', requireToken, (req, res, next) => {
         .catch(next)
 })
 
+
+// DELETE -> remove ALL items from cart
+// DELETE /item/<item_id>
+router.delete('/empty', requireToken, (req, res, next) => {
+
+  const cartOwner = req.user.id
+  // find the cart
+  Cart.find({ owner: cartOwner })
+      //if a cart is not found
+      .then(handle404)
+      //cart found
+      .then(cart => {
+          // require that the deleter is the owner of the cart
+          requireOwnership(req, cart[0])
+          // removes all items from cart
+          cart[0].items=[]
+
+          // // return the saved cart
+          return cart[0].save()
+      })
+      // send 204 no content
+      .then(() => res.sendStatus(204))
+      .catch(next)
+})
+
+
 // UPDATE -> increases item quantity by one
 // PATCH /item/add/<item_id>
 router.patch('/item/add/:id', requireToken, (req, res, next) => {
