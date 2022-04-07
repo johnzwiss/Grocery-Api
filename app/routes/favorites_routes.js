@@ -27,7 +27,7 @@ const requireToken = passport.authenticate('bearer', { session: false })
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
 
-router.post('/favorites/:userId', removeBlanks, (req, res, next) => {
+router.post('/favorites/:userId', requireToken, (req, res, next) => {
     // get our favorites from req.body
     const favorites = req.body.favorites
     // get our userId from req.params.id
@@ -50,3 +50,5 @@ router.post('/favorites/:userId', removeBlanks, (req, res, next) => {
         // catch errors and send to the handler
         .catch(next)
 })
+
+module.exports = router

@@ -3,7 +3,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 require('dotenv').config
-const stripe = require('stripe')("sk_test_51KdGMSF7PsZfSFZBl4g1OMVv30ncwV0wM2mUeifPEAnWrzuJQj2EzpPwlQbCtCd7O9sEIiQOjGoD1kfuIfGVVKAo00shoiOfVB")
+const stripe = require('stripe')(process.env.STRIPE_SECRET_TEST)
 const bodyParser = require('body-parser')
 
 // require route files
@@ -12,6 +12,7 @@ const userRoutes = require('./app/routes/user_routes')
 const recipeRoutes = require('./app/routes/recipe_routes')
 const itemRoutes = require('./app/routes/item_routes')
 const ingredientRoutes = require('./app/routes/ingredient_routes')
+const favoritesRoutes = require('./app/routes/favorites_routes')
 
 // require middleware
 const errorHandler = require('./lib/error_handler')
@@ -104,6 +105,7 @@ app.use(userRoutes)
 app.use(itemRoutes)
 app.use(recipeRoutes)
 app.use(ingredientRoutes)
+app.use(favoritesRoutes)
 
 // register error handling middleware
 // note that this comes after the route middlewares, because it needs to be
