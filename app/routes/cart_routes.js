@@ -33,7 +33,7 @@ const router = express.Router()
 // GET /carts/5a7db6c74d55bc51bdf39793
 router.get('/carts/view', requireToken, (req, res, next) => {
 	// req.params.id will be set based on the `:id` in the route
-	cartOwner = req.user.id
+	const cartOwner = req.user.id
 	Cart.find({owner:cartOwner})
 		.then(handle404)
 		// if `findById` is succesful, respond with 200 and "cart" JSON
