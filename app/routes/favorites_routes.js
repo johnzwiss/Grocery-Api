@@ -32,16 +32,20 @@ const router = express.Router()
 router.get('/users', requireToken, (req, res, next) => {
     const userId = req.data
     console.log('this is req.data', req.data)
-	User.find({_id: userId})
+    console.log('this is req.user._id', req.user._id)
+	User.find(req.user._id)
 		.then((user) => {
             console.log('this is user', user)
 			// `recipes` will be an array of Mongoose documents
 			// we want to convert each one to a POJO, so we use `.map` to
 			// apply `.toObject` to each one
-			return user.favorites.map((favorite) => favorite.toObject())
+			return user
 		})
 		// respond with status 200 and JSON of the recipes
-		.then((favorites) => res.status(200).json({ favorites: favorites }))
+		.then((fave) => {
+            console.log('this is fave', fave)
+            res.status(200).json({ fave: fave })
+    })
 		// if an error occurs, pass it to the handler
 		.catch(next)
 })
