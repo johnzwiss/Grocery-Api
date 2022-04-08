@@ -2,7 +2,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
-require('dotenv').config
+require('dotenv').config()
 const stripe = require('stripe')(process.env.STRIPE_SECRET_TEST)
 const bodyParser = require('body-parser')
 
