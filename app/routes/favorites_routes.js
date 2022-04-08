@@ -27,11 +27,30 @@ const requireToken = passport.authenticate('bearer', { session: false })
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
 
-router.post('/favorites/:userId', requireToken, (req, res, next) => {
+// INDEX
+// GET /recipes
+router.get('/users', requireToken, (req, res, next) => {
+    const userId = req.data
+    console.log('this is req.data', req.data)
+	User.find({_id: userId})
+		.then((user) => {
+            console.log('this is user', user)
+			// `recipes` will be an array of Mongoose documents
+			// we want to convert each one to a POJO, so we use `.map` to
+			// apply `.toObject` to each one
+			return user.favorites.map((favorite) => favorite.toObject())
+		})
+		// respond with status 200 and JSON of the recipes
+		.then((favorites) => res.status(200).json({ favorites: favorites }))
+		// if an error occurs, pass it to the handler
+		.catch(next)
+})
+
+router.post('/favorites/', requireToken, (req, res, next) => {
     // get our favorites from req.body
     const favorites = req.body.favorites
     // get our userId from req.params.id
-    const userId = req.params.userId
+    const userId = req.user.id
     // find the user
     User.findById(userId)
         // handle what happens if no user is found
