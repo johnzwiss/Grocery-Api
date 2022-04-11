@@ -11,6 +11,9 @@ const favoriteSchema = new mongoose.Schema(
             type: String,
            
         },
+        spoonacularId: {
+            type: String
+        },
 		extendedIngredients: [{
             type: Object
         }],
